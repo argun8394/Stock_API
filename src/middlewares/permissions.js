@@ -7,7 +7,7 @@ module.exports = {
     isLogin: (req, res, next) => {
 
         // Set Passive:
-        return next()
+        //return next()
 
         // any User:
         if (req.user && req.user.is_active) {
