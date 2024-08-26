@@ -7,11 +7,11 @@ const router = require('express').Router()
 // URL: /
 
 // // auth:
-// router.use('/auth', require('./auth'))
+router.use('/auth', require('./auth'))
 // user:
 router.use('/users', require('./user'))
 // // token:
-// router.use('/tokens', require('./token'))
+router.use('/tokens', require('./token'))
 
 
 // // brand:
@@ -28,7 +28,7 @@ router.use('/users', require('./user'))
 // router.use('/sales', require('./sale'))
 
 // document:
-router.use('/documents', require('./document'))
+// router.use('/documents', require('./document'))
 
 /* ------------------------------------------------------- */
 module.exports = router
