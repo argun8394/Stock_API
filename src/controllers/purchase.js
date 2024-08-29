@@ -60,7 +60,13 @@ module.exports = {
 
     delete: async (req, res) => {
 
+          // get current stock quantity from the Purchase:
+          const currentPurchase = await Purchase.findOne({ _id: req.params.id })
+
         const data = await Purchase.deleteOne({ _id: req.params.id })
+
+         // set stock (quantity) when Purchase process:
+         const updateProduct = await Product.updateOne({ _id: currentPurchase.product_id }, { $inc: { stock: -currentPurchase.quantity } })                                                                                        
 
         res.status(data.deletedCount ? 204 : 404).send({
             error: !data.deletedCount,
