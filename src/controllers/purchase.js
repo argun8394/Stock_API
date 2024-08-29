@@ -3,6 +3,7 @@
 
 // Purchase Controller:
 
+const Product = require('../models/product')
 const Purchase = require('../models/purchase')
 
 module.exports = {
@@ -26,6 +27,9 @@ module.exports = {
         req.body.user_id = req.user?._id
 
         const data = await Purchase.create(req.body)
+
+        //update stock
+        const updateProduct = await Product.updateOne({ _id: data.product_id }, { $inc: { stock: +data.quantity } }) 
 
         res.status(201).send({
             error: false,
