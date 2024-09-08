@@ -60,6 +60,25 @@ module.exports = {
 
     update: async (req, res) => {
 
+        if (req.body?.quantity) {
+            // get current stock quantity from the Sale:
+            const currentSale = await Sale.findOne({ _id: req.params.id })
+            // different:
+            const quantity = req.body.quantity - currentSale.quantity
+            // console.log(quantity)
+
+            // set stock (quantity) when Sale process:
+           const updateProduct = await Product.updateOne({ _id: currentSale.product_id, stock: { $gte: quantity } }, { $inc: { stock: -quantity } })
+            // console.log(updateProduct)
+            
+            // if stock limit not enough:
+            if (updateProduct.modifiedCount == 0) { // Check Limit
+                res.errorStatusCode = 422
+                throw new Error('There is not enough stock for this sale.')
+            }
+        }
+
+        // Update:
         const data = await Sale.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
 
         res.status(202).send({
