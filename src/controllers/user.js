@@ -3,6 +3,8 @@
 // User Controller:
 
 const User = require('../models/user')
+const Token = require('../models/token')
+const passwordEncrypt = require('../helpers/passwordEncrypt')
 
 module.exports = {
 
@@ -18,8 +20,7 @@ module.exports = {
         //     details: await res.getModelListDetails(User),
         //     data
         // })
-        res.status(200).send(data)
-        
+        res.status(200).send(data)       
         
     },
 
@@ -32,8 +33,15 @@ module.exports = {
 
         const data = await User.create(req.body)
 
+        // Create token for auto-login: 
+        const tokenData = await Token.create({
+            user_id: data._id,
+            token: passwordEncrypt(data._id + Date.now()) 
+        })
+
         res.status(201).send({
             error: false,
+            token: tokenData.token,
             data
         })
     },
